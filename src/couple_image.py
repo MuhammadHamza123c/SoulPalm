@@ -27,7 +27,7 @@ def coup_palm(image1_url: str, image2_url: str, f1: str, f2: str,f1z:str,f2z:str
             messages=[
                 {
                     "role": "system",
-                    "content": couple_image_prompt
+                    "content": f"Only Do if image is palm and clear otherwise just return every json None  {couple_image_prompt}"
                 },
                 {
                     "role": "user",
