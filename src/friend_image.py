@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from dotenv import load_dotenv
+from src.check_palm import check_point
 import os
 from groq import (
     Groq,
@@ -19,90 +20,100 @@ client = Groq(api_key=GROQ_API_KEY)
 
 
 def fri_palm(image1_url: str, image2_url: str, f1: str, f2: str,f1z:str,f2z:str):
+    image_list=[]
+    result_list=[]
+    image_list = [image1_url, image2_url]
+    for i in image_list:
+        check_it=check_point(image1_url=i)
+        result_list.append(check_it)
+  
+    if all(x == "Yes" for x in result_list):
 
-    try:
-        response = client.chat.completions.create(
-            model="meta-llama/llama-4-scout-17b-16e-instruct",
+        try:
+            response = client.chat.completions.create(
+                model="meta-llama/llama-4-scout-17b-16e-instruct",
 
-            messages=[
-                {
-                    "role": "system",
-                    "content": f"Only Do if both images are of palm and clear otherwise just return every json None  {friend_image_prompt}"
+                messages=[
+                    {
+                        "role": "system",
+                        "content": friend_image_prompt
+                    },
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": f"Friend one: {f1} and zodiac sign: {f1z}, Friend two: {f2} and zodiac sign: {f2z}. Return full structured JSON."
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {"url": image1_url}
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {"url": image2_url}
+                            }
+                        ]
+                    }
+                ],
+
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "friend_palm",
+                        "schema": FriendPalmResponse.model_json_schema()
+                    }
                 },
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": f"Friend one: {f1} and zodiac sign: {f1z}, Friend two: {f2} and zodiac sign: {f2z}. Return full structured JSON."
-                        },
-                        {
-                            "type": "image_url",
-                            "image_url": {"url": image1_url}
-                        },
-                        {
-                            "type": "image_url",
-                            "image_url": {"url": image2_url}
-                        }
-                    ]
-                }
-            ],
 
-            response_format={
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "friend_palm",
-                    "schema": FriendPalmResponse.model_json_schema()
-                }
-            },
+                temperature=1,
+                max_completion_tokens=1024,
+                top_p=1,
+                stream=False,
+            )
 
-            temperature=1,
-            max_completion_tokens=1024,
-            top_p=1,
-            stream=False,
-        )
+            raw = response.choices[0].message.content
 
-        raw = response.choices[0].message.content
+            data = json.loads(raw)
+            result = FriendPalmResponse.model_validate(data)
 
-        data = json.loads(raw)
-        result = FriendPalmResponse.model_validate(data)
+            return result.model_dump()
 
-        return result.model_dump()
+        # ---------------- ERROR HANDLING ----------------
 
-    # ---------------- ERROR HANDLING ----------------
+        except RateLimitError:
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded"
+            )
 
-    except RateLimitError:
-        raise HTTPException(
-            status_code=429,
-            detail="Rate limit exceeded"
-        )
+        except APITimeoutError:
+            raise HTTPException(
+                status_code=504,
+                detail="Request timed out"
+            )
 
-    except APITimeoutError:
-        raise HTTPException(
-            status_code=504,
-            detail="Request timed out"
-        )
+        except APIConnectionError:
+            raise HTTPException(
+                status_code=503,
+                detail="Connection error"
+            )
 
-    except APIConnectionError:
-        raise HTTPException(
-            status_code=503,
-            detail="Connection error"
-        )
+        except APIError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Groq API error: {str(e)}"
+            )
 
-    except APIError as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Groq API error: {str(e)}"
-        )
+        except json.JSONDecodeError:
+            raise HTTPException(
+                status_code=500,
+                detail="Invalid JSON returned by model"
+            )
 
-    except json.JSONDecodeError:
-        raise HTTPException(
-            status_code=500,
-            detail="Invalid JSON returned by model"
-        )
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Unexpected error: {str(e)}"
-        )
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Unexpected error: {str(e)}"
+            )
+    else:
+        pass
