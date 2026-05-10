@@ -248,6 +248,12 @@
             border-color: var(--gold);
         }
 
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
         .tilt-card::before {
             content: '';
             position: absolute;
@@ -594,11 +600,77 @@
             }
 
             .hero-title {
-                font-size: 4rem;
+                font-size: clamp(3rem, 15vw, 5rem);
             }
 
             .oracle-wrapper {
                 padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 5%;
+                flex-direction: column;
+                gap: 20px;
+                background: rgba(2, 2, 5, 0.95);
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .hero {
+                padding-top: 180px;
+                min-height: 100vh;
+            }
+
+            .section {
+                padding: 80px 5%;
+            }
+
+            .section-header {
+                margin-bottom: 60px;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tilt-card {
+                padding: 40px 30px;
+            }
+
+            .oracle-tabs {
+                gap: 30px;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .oracle-wrapper {
+                padding: 40px 20px;
+            }
+
+            .revelation-btn {
+                padding: 20px;
+                font-size: 1.1rem;
+                letter-spacing: 3px;
+            }
+
+            footer {
+                padding: 60px 5%;
+            }
+
+            .footer-logo {
+                font-size: 1.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -697,7 +769,7 @@
                 </form>
 
                 <form id="friend-form" class="oracle-form" style="display:none">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Friend 1 Name</label>
                             <input type="text" name="friend1" required placeholder="Enter name...">
@@ -707,7 +779,7 @@
                             <input type="text" name="friend2" required placeholder="Enter name...">
                         </div>
                     </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Friend 1 Zodiac</label>
                             <select name="f1z" required>
@@ -743,7 +815,7 @@
                             </select>
                         </div>
                     </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Friend 1 Palm</label>
                             <div class="upload-zone" onclick="this.querySelector('input').click()">
@@ -765,7 +837,7 @@
                 </form>
 
                 <form id="relationship-form" class="oracle-form" style="display:none">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Partner 1 Name</label>
                             <input type="text" name="friend1" required placeholder="Enter name...">
@@ -775,7 +847,7 @@
                             <input type="text" name="friend2" required placeholder="Enter name...">
                         </div>
                     </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Partner 1 Zodiac</label>
                             <select name="f1z" required>
@@ -811,7 +883,7 @@
                             </select>
                         </div>
                     </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Partner 1 Palm</label>
                             <div class="upload-zone" onclick="this.querySelector('input').click()">
