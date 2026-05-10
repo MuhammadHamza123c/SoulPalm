@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SoulPalm | The Celestial Oracle</title>
+    <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -605,68 +606,118 @@
         }
 
         @media (max-width: 768px) {
+            * {
+                cursor: auto !important;
+            }
+
+            #cursor-glow, #cursor-dot {
+                display: none !important;
+            }
+
             nav {
-                padding: 20px 5%;
-                flex-direction: column;
-                gap: 20px;
-                background: rgba(2, 2, 5, 0.95);
+                padding: 15px 5%;
+                flex-direction: row;
+                justify-content: space-between;
+                background: rgba(2, 2, 5, 0.98);
             }
 
             .nav-links {
-                gap: 20px;
+                display: none; /* Hide standard links on mobile or use a simple menu */
+            }
+
+            .logo {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+
+            .logo img {
+                height: 30px !important;
             }
 
             .hero {
-                padding-top: 180px;
-                min-height: 100vh;
+                padding-top: 150px;
+                min-height: 90vh;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .hero-desc {
+                font-size: 0.95rem;
+                margin-bottom: 30px;
+            }
+
+            .sacred-circle {
+                width: 300px;
+                height: 300px;
             }
 
             .section {
-                padding: 80px 5%;
-            }
-
-            .section-header {
-                margin-bottom: 60px;
+                padding: 60px 5%;
             }
 
             .section-header h2 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
 
             .card-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .tilt-card {
-                padding: 40px 30px;
+                padding: 30px 20px;
             }
 
             .oracle-tabs {
-                gap: 30px;
-                flex-direction: column;
-                align-items: center;
+                gap: 15px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .tab-trigger {
+                font-size: 0.9rem;
             }
 
             .oracle-wrapper {
-                padding: 40px 20px;
-            }
-
-            .revelation-btn {
-                padding: 20px;
-                font-size: 1.1rem;
-                letter-spacing: 3px;
-            }
-
-            footer {
-                padding: 60px 5%;
-            }
-
-            .footer-logo {
-                font-size: 1.8rem;
+                padding: 30px 15px;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .upload-zone {
+                padding: 30px;
+            }
+
+            .revelation-btn {
+                padding: 18px;
+                font-size: 1rem;
+            }
+
+            .footer-logo {
+                font-size: 1.5rem;
+            }
+
+            .footer-logo img {
+                height: 40px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .oracle-tabs {
+                gap: 10px;
+            }
+            
+            .tab-trigger {
+                font-size: 0.8rem;
             }
         }
 
@@ -741,7 +792,10 @@
     <div id="star-message">These are astrology stars</div>
 
     <nav>
-        <a href="#" class="logo">SOULPALM</a>
+        <a href="#" class="logo">
+            <img src="logo.png" alt="SoulPalm Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+            SOULPALM
+        </a>
         <div class="nav-links">
             <a href="#wisdom">Wisdom</a>
             <a href="#paths">Paths</a>
@@ -971,7 +1025,10 @@
     </section>
 
     <footer>
-        <div class="footer-logo">SOULPALM</div>
+        <div class="footer-logo">
+            <img src="logo.png" alt="SoulPalm Logo" style="height: 60px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto;">
+            SOULPALM
+        </div>
         <p style="color: var(--text-dim); font-weight: 200;">Mapping the celestial dance of existence since time
             immemorial.</p>
         <div
@@ -1184,7 +1241,8 @@
         function initStars() {
             const container = document.getElementById('stars-container');
             const message = document.getElementById('star-message');
-            const starCount = 100;
+            const isMobile = window.innerWidth <= 768;
+            const starCount = isMobile ? 40 : 100;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
