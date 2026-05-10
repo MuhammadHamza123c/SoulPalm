@@ -27,7 +27,7 @@ def solo_palm(image_url: str,zodiac_sign:str):
             messages=[
                 {
                     "role": "system",
-                    "content": solo_image_prompt
+                    "content": f"Only Do if image is palm and clear otherwise just return every json None {solo_image_prompt}"
                 },
                 {
                     "role": "user",
