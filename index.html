@@ -669,6 +669,66 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Star Field Effect */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle var(--duration) infinite ease-in-out, float var(--float-duration) infinite ease-in-out;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: 0.3s;
+        }
+
+        .star:hover {
+            box-shadow: 0 0 10px white;
+            opacity: 1 !important;
+            transform: scale(2) !important;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.5); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(var(--move-x), var(--move-y)); }
+        }
+
+        #star-message {
+            position: fixed;
+            background: rgba(229, 192, 123, 0.95);
+            color: #020205;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 0.9rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10001;
+            white-space: nowrap;
+            box-shadow: 0 0 30px rgba(229, 192, 123, 0.4);
+            transform: translate(-50%, -100%) scale(0.5);
+        }
+
+        #star-message.show {
+            opacity: 1;
+            transform: translate(-50%, -100%) scale(1);
+        }
     </style>
 </head>
 
@@ -677,6 +737,8 @@
     <div id="cursor-glow"></div>
     <div id="cursor-dot"></div>
     <div id="scroll-progress"></div>
+    <div id="stars-container"></div>
+    <div id="star-message">These are astrology stars</div>
 
     <nav>
         <a href="#" class="logo">SOULPALM</a>
@@ -1117,6 +1179,53 @@
         document.getElementById('solo-form').onsubmit = (e) => handleFormSubmit(e, '/SoulPalm/solo');
         document.getElementById('friend-form').onsubmit = (e) => handleFormSubmit(e, '/SoulPalm/friend');
         document.getElementById('relationship-form').onsubmit = (e) => handleFormSubmit(e, '/SoulPalm/realtionship');
+
+        // Astrology Stars Interaction
+        function initStars() {
+            const container = document.getElementById('stars-container');
+            const message = document.getElementById('star-message');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = Math.random() * 3 + 2;
+                const floatDuration = Math.random() * 10 + 10;
+                const moveX = (Math.random() - 0.5) * 50;
+                const moveY = (Math.random() - 0.5) * 50;
+
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.setProperty('--float-duration', `${floatDuration}s`);
+                star.style.setProperty('--move-x', `${moveX}px`);
+                star.style.setProperty('--move-y', `${moveY}px`);
+                star.style.opacity = Math.random() * 0.5 + 0.2;
+
+                star.onclick = (e) => {
+                    message.style.left = e.clientX + 'px';
+                    message.style.top = (e.clientY - 20) + 'px';
+                    message.classList.add('show');
+                    
+                    setTimeout(() => {
+                        message.classList.remove('show');
+                    }, 2000);
+                    
+                    // Add a pulse effect to the clicked star
+                    star.style.boxShadow = '0 0 30px white';
+                    setTimeout(() => star.style.boxShadow = 'none', 500);
+                };
+
+                container.appendChild(star);
+            }
+        }
+        initStars();
     </script>
 </body>
 
