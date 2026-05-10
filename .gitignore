@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+.env
+.vercel/
+*.pyc
+*.log
+uploads/
+test*.jpg
+test*.png
+6bae0804-4da2-4312-9655-5a375e42c886.jpeg
+# Ignore local images that are not in public/
+*.jpg
+*.png
+*.jpeg
+!public/
+!public/*
