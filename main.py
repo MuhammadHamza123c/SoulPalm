@@ -9,11 +9,7 @@ import os
 
 app=FastAPI()
 
-# Create public dir if it doesn't exist (safety for deployment)
-if not os.path.exists("public"):
-    os.makedirs("public")
 
-app.mount("/public", StaticFiles(directory="public"), name="public")
 
 
 app.add_middleware(
